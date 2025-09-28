@@ -83,7 +83,7 @@ export default class CommentsController {
       .andWhere('authorId', auth.user!.id)
     if (!comment?.id) return response.notFound({ message: 'Comment not found' })
 
-    await comment.delete()
+    await comment.softDeleteRecursively()
     return response.noContent()
   }
 

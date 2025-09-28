@@ -31,7 +31,7 @@ export default class extends BaseSchema {
         .nullable()
         .references('id')
         .inTable(this.tableName)
-        .onDelete('CASCADE')
+        .onDelete('NO ACTION')
 
       table.enum('status', ['pending', 'approved', 'rejected']).defaultTo('pending')
 
