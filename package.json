@@ -9,7 +9,7 @@
     "build:check": "tsc --noEmit",
     "start": "node bin/server.js",
     "start:dev": "node ace serve --hmr",
-    "pretest": "npm run services:up && node infra/wait-for-services.mjs",
+    "pretest": "npm run services:up && node infra/wait-for-services.mjs && npm run migration:up",
     "test": "node ace test",
     "posttest": "npm run services:stop",
     "services:up": "docker compose up -d",
