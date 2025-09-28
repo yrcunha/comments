@@ -70,6 +70,7 @@ export default class CommentsController {
     if (!comment?.id) return response.notFound({ message: 'Comment not found' })
 
     comment.text = payload.text
+    comment.status = 'pending'
     await comment.save()
     return response.noContent()
   }
@@ -82,7 +83,7 @@ export default class CommentsController {
       .andWhere('authorId', auth.user!.id)
     if (!comment?.id) return response.notFound({ message: 'Comment not found' })
 
-    await comment.delete()
+    await comment.softDeleteRecursively()
     return response.noContent()
   }
 

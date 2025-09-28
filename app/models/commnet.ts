@@ -1,4 +1,5 @@
 import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import db from '@adonisjs/lucid/services/db'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 
@@ -17,15 +18,12 @@ export default class Comment extends BaseModel {
   @column()
   declare text: string
 
-  /** CHAVE ESTRANGEIRA */
   @column({ columnName: 'parent_id', serializeAs: null })
   declare parentId: number | null
 
-  /** RELACIONAMENTO COM O PAI */
   @belongsTo(() => Comment, { foreignKey: 'parentId' })
   declare parent: BelongsTo<typeof Comment>
 
-  /** RELACIONAMENTO COM OS FILHOS */
   @hasMany(() => Comment, { foreignKey: 'parentId' })
   declare replies: HasMany<typeof Comment>
 
@@ -45,4 +43,22 @@ export default class Comment extends BaseModel {
 
   @column({ serializeAs: null })
   declare deleted: boolean
+
+  async softDeleteRecursively() {
+    await await db.rawQuery(
+      `
+      WITH RECURSIVE replies AS (
+        SELECT id FROM comments WHERE id = ?
+        UNION ALL
+        SELECT c.id
+        FROM comments c
+        INNER JOIN replies d ON c.parent_id = d.id
+      )
+      UPDATE comments
+      SET deleted = true
+      WHERE id IN (SELECT id FROM replies)
+    `,
+      [this.id]
+    )
+  }
 }
