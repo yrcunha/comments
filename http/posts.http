@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:3333
+###
+
+# @name login
+POST  {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "romain@adonisjs.com",
+    "password": "supersecret"
+}
+###
+
+@authToken = {{login.response.body.token}}
+@tokenType = {{login.response.body.type}}
+
+# @name create
+POST {{baseUrl}}/posts
+Authorization: {{tokenType}} {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "sample",
+    "text": "Wed, 21 Oct 2015 18:27:50 GMT"
+}
+###
+
+# @name all
+GET {{baseUrl}}/posts
+  ?page=0
+  &limit=0
+Authorization: {{tokenType}} {{authToken}}
+

@@ -1,0 +1,75 @@
+@baseUrl = http://localhost:3333
+@postId = 3
+###
+
+# @name login
+POST  {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "virk@adonisjs.com",
+    "password": "secret"
+}
+###
+
+@authToken = {{login.response.body.token}}
+@tokenType = {{login.response.body.type}}
+
+# @name create
+POST {{baseUrl}}/posts/{{postId}}/comments
+Authorization: {{tokenType}} {{authToken}}
+Content-Type: application/json
+
+{
+    "text": "sample no noooo",
+    "parentId": "A"
+}
+###
+
+# @name all
+GET {{baseUrl}}/posts/{{postId}}/comments
+  ?page=1
+  &limit=10
+Authorization: {{tokenType}} {{authToken}}
+###
+
+# @name pendings
+GET {{baseUrl}}/posts/{{postId}}/comments/pending
+  ?page=1
+  &limit=10
+Authorization: {{tokenType}} {{authToken}}
+###
+
+@commentId = 28
+
+# @name update
+PUT {{baseUrl}}/comments/{{commentId}}
+Authorization: {{tokenType}} {{authToken}}
+Content-Type: application/json
+
+{
+    "text": "sample no noooo"
+}
+###
+
+# @name delete
+DELETE {{baseUrl}}/comments/{{commentId}}
+Authorization: {{tokenType}} {{authToken}}
+###
+
+# @name approval
+PATCH {{baseUrl}}/comments/{{commentId}}/approval
+Authorization: {{tokenType}} {{authToken}}
+Content-Type: application/json
+
+{
+    "status": "approved"
+}
+###
+
+# @name replies
+GET {{baseUrl}}/comments/{{commentId}}/replies
+  # ?page=2
+  # &limit=10
+Authorization: {{tokenType}} {{authToken}}
+###
