@@ -70,6 +70,7 @@ export default class CommentsController {
     if (!comment?.id) return response.notFound({ message: 'Comment not found' })
 
     comment.text = payload.text
+    comment.status = 'pending'
     await comment.save()
     return response.noContent()
   }

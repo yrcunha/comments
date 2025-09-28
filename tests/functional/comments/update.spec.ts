@@ -45,7 +45,7 @@ test.group('[PUT] /comments/{{commentId}}', (group) => {
     response.assertNotFound()
   })
 
-  test('success', async ({ client }) => {
+  test('success', async ({ assert, client }) => {
     const comment = await Comment.create({
       postId: post.id,
       authorId: user.id,
@@ -57,5 +57,12 @@ test.group('[PUT] /comments/{{commentId}}', (group) => {
       .json({ text: 'sample no noooo' })
       .loginAs(user)
     response.assertNoContent()
+
+    const model = await Comment.find(comment.id)
+    assert.equal(
+      model!.status,
+      'pending',
+      'must change the status of the comment to prevent anyone from circumventing the approval system'
+    )
   })
 })
