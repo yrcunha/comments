@@ -18,7 +18,7 @@
     "migration:create": "node ace make:migration",
     "migration:up": "node ace migration:run",
     "migration:down": "node ace migration:rollback",
-    "migration:seed": "node ace db:seed",
+    "db:seed": "node ace db:seed",
     "lint:eslint:check": "eslint .",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
