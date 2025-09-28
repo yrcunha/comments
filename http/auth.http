@@ -1,0 +1,14 @@
+@baseUrl = http://localhost:3333
+@postId = 3
+###
+
+# @name login
+POST  {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "email": "virk@adonisjs.com",
+    "password": "secret"
+}
+###
+
